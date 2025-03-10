@@ -1,0 +1,53 @@
+.matter-element {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    position: relative;
+  }
+  
+  .matter-element:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .matter-element.selected {
+    border: 3px solid #ffcc00;
+    box-shadow: 0 0 15px #ffcc00;
+    transform: scale(1.1);
+  }
+  
+  .element-symbol {
+    font-size: 24px;
+    line-height: 1;
+  }
+  
+  .element-earth {
+    background-color: #8B4513;
+    border: 2px solid #5D2906;
+  }
+  
+  .element-water {
+    background-color: #1E90FF;
+    border: 2px solid #0066CC;
+  }
+  
+  .element-fire {
+    background-color: #FF4500;
+    border: 2px solid #CC3700;
+  }
+  
+  .element-air {
+    background-color: #F0F8FF;
+    border: 2px solid #C0D8FF;
+  }
+  
+  .element-void {
+    background-color: #202020;
+    border: 2px solid #101010;
+  }
