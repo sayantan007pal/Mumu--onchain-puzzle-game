@@ -49,7 +49,7 @@ Understanding these rules is the key to solving the game's puzzles!
 
 ### Play the Game
 
-Visit [https://mumu-game.xyz](https://mumu-game.xyz) to play the deployed version.
+Visit [(https://mu-mu-s1.netlify.app/)](https://mu-mu-s1.netlify.app/) to play the deployed version.
 
 1. Connect your Starknet wallet
 2. Select a level
