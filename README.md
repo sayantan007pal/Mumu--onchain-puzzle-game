@@ -3,7 +3,10 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Starknet](https://img.shields.io/badge/Starknet-Powered-blue)](https://starknet.io/)
 
-![MuMu Game Logo](<img width="1352" alt="Screenshot 2025-03-10 at 5 04 37 PM" src="https://github.com/user-attachments/assets/878b09a3-8356-4102-880c-27c3acd009cc" />)
+MuMu Game Logo
+
+
+<img width="1352" alt="Screenshot 2025-03-10 at 5 04 37 PM" src="https://github.com/user-attachments/assets/9f3e874d-4f85-4c25-95ed-1b834116a23f" />
 
 
 ## 🧩 About MuMu
