@@ -140,7 +140,9 @@ MuMu is built with a clean separation between the on-chain game logic and the fr
 
 - **Smart Contract**: Handles all game logic, state transitions, and stores player progress
 - **Frontend**: React application that visualizes the game state and interacts with the contract
-mumu-game/
+
+
+```mumu-game/
 ├── contracts/               # Starknet smart contracts
 │   ├── src/
 │   │   ├── game_core.cairo
@@ -192,6 +194,7 @@ mumu-game/
 ├── LICENSE
 ├── CONTRIBUTING.md
 └── package.json
+```
 
 ## 📄 License
 
