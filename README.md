@@ -41,14 +41,20 @@ Visit [https://your-app.vercel.app](https://your-app.vercel.app) to play the dep
 
 - A Starknet-compatible wallet (Argent X, Braavos)
 - Some ETH on Starknet for transaction fees
-- Node.js and Yarn for local development
+- Node.js and npm (or Yarn) for local development
 
 ### Local Development
 
+Follow these steps to run the frontend locally:
+
 ```bash
 cd frontend
- yarn install
- yarn dev
+# Copy and configure environment variables
+cp .env.example .env
+# Install dependencies
+npm install    # or yarn install
+# Start development server
+npm run dev    # or yarn dev
 ```
 
 ## 🛠️ Smart Contract
