@@ -6,7 +6,8 @@
     "compile": "starknet-compile src/*.cairo --output build/",
     "deploy": "bash scripts/deploy.sh",
     "deploy:testnet": "bash scripts/deploy_testnet.sh",
-    "add-levels": "bash scripts/add-levels.sh"
+    "add-levels": "bash scripts/add-levels.sh",
+    "test": "jest"
   },
   "devDependencies": {
     "dotenv": "^16.0.0",

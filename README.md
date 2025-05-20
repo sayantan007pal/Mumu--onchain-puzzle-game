@@ -42,6 +42,7 @@ Visit [https://your-app.vercel.app](https://your-app.vercel.app) to play the dep
 - A Starknet-compatible wallet (Argent X, Braavos)
 - Some ETH on Starknet for transaction fees
 - Node.js and npm (or Yarn) for local development
+- Python 3.8+ and Cairo Lang for contract compilation and Starknet CLI (install via `pip install cairo-lang`). See [Cairo Lang Quickstart](https://www.cairo-lang.org/docs/quickstart.html) for more details.
 
 ### Local Development
 
@@ -55,6 +56,61 @@ cp .env.example .env
 npm install    # or yarn install
 # Start development server
 npm run dev    # or yarn dev
+```
+
+#### Configure `frontend/.env`
+
+Great! You have Argent X installed and a wallet created. Here’s how you can get the values for your `.env` file:
+
+---
+
+### 1. `VITE_GAME_CONTRACT_ADDRESS`
+
+This is the address of your deployed game contract on Starknet.  
+**You need to deploy your contract first** (using tools like [Starknet CLI](https://docs.starknet.io/documentation/tools/cli/), [Starknet.js](https://www.starknetjs.com/), or [Voyager](https://voyager.online/) if you have a contract ready).
+
+- If you have already deployed your contract, you’ll find the address in the deployment output.
+- If not, you need to deploy your contract and copy the address.
+
+**Example:**
+```
+VITE_GAME_CONTRACT_ADDRESS=0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+```
+
+---
+
+### 2. `VITE_STARKNET_RPC_URL` for Argent X
+
+Argent X connects to Starknet via RPC endpoints.  
+You need a Starknet RPC URL (for testnet or mainnet).  
+Argent X uses public endpoints by default, but for dApp development, you can use:
+
+#### **Testnet:**
+```
+VITE_STARKNET_RPC_URL=https://starknet-testnet.public.blastapi.io/rpc/v0_6
+```
+
+#### **Mainnet:**
+```
+VITE_STARKNET_RPC_URL=https://starknet-mainnet.public.blastapi.io/rpc/v0_6
+```
+
+You can also use other providers like [Infura](https://www.infura.io/), [Alchemy](https://www.alchemy.com/), or [Chainstack](https://chainstack.com/) if you want your own API key.
+
+---
+
+### 3. **How to use with Argent X**
+
+- Argent X will automatically detect the network (testnet/mainnet) based on your wallet’s selected network.
+- Your dApp should use the same network as your wallet for seamless interaction.
+
+---
+
+### 4. **Sample `.env` file**
+
+```env
+VITE_GAME_CONTRACT_ADDRESS=0xYOUR_GAME_CONTRACT_ADDRESS
+VITE_STARKNET_RPC_URL=https://starknet-testnet.public.blastapi.io/rpc/v0_6
 ```
 
 ## 🛠️ Smart Contract
@@ -83,6 +139,28 @@ cd contracts
 ## 📐 Architecture
 
 The on-chain game logic lives in the `contracts/` folder (Cairo smart contracts), while the React frontend resides in `frontend/`. Smart contracts enforce state and transformations; the frontend provides the user interface.
+
+## ✅ Testing
+
+### Install dependencies
+
+```bash
+yarn install
+```
+
+### Contracts tests
+
+```bash
+cd contracts
+yarn test
+```
+
+### Frontend tests
+
+```bash
+cd frontend
+yarn test
+```
 
 ## 📄 License
 

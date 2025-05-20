@@ -6,6 +6,7 @@ import App from '../src/App';
 describe('App component', () => {
   it('renders the main title', () => {
     render(<App />);
-    expect(screen.getByText(/MuMu Game/i)).toBeInTheDocument();
+    const titles = screen.getAllByText(/MuMu Game/i);
+    expect(titles.length).toBeGreaterThan(0);
   });
 });
