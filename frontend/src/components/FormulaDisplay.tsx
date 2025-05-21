@@ -3,10 +3,15 @@ import { Formula, MatterType } from '../types/GameTypes'; // Ensure this path is
 import '../styles/FormulaDisplay.css';
 
 interface FormulaDisplayProps {
-  formula: Formula;
+  formula: Formula | string;
 }
 
 const FormulaDisplay: React.FC<FormulaDisplayProps> = ({ formula }) => {
+  // DEV/TEST: If formula is a string (mock/test mode), just render it as text
+  if (typeof formula === 'string') {
+    return <div className="formula-display formula-string">{formula}</div>;
+  }
+
   const getMatterSymbol = (type: MatterType): string => {
     switch (type) {
       case MatterType.EARTH:

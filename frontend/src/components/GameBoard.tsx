@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import MatterElement from './MatterElement';
 import FormulaDisplay from './FormulaDisplay';
 import { useGameState } from '../hooks/useGameState';
-import { useStarknet } from '../hooks/useStarknet';
 import { MatterType, Direction, Formula } from '../types/GameTypes';
-import { Contract } from '../types/ContractTypes';
 import '../styles/GameBoard.css';
 
 interface GameBoardProps {
@@ -16,83 +14,37 @@ interface GameBoardProps {
 }
 
 const GameBoard: React.FC<GameBoardProps> = ({ puzzleId, initialGrid, targetGrid, formulas, onSolve }) => {
-  const { account, contract } = useStarknet();
-  const { grid, moves, setGrid, applyMatterTransformation, undoLastMove, resetGrid, isSolved } = useGameState(initialGrid);
+  const { grid, moves, setGrid, applyMatterTransformation, undoLastMove, resetGrid, isSolved } = useGameState(initialGrid, targetGrid);
   const [selectedElement, setSelectedElement] = useState<{ x: number, y: number } | null>(null);
   const [moveCount, setMoveCount] = useState(0);
   const [completed, setCompleted] = useState(false);
-  const [loading, setLoading] = useState(true);
 
-  // Initialize game from contract
-  useEffect(() => {
-    if (account && contract && puzzleId) {
-      initializeGame();
-    }
-  }, [account, contract, puzzleId]);
-
-  const initializeGame = async () => {
-    try {
-      // Game state will be loaded by the useGameState hook
-      // Game state will be loaded by the useGameState hook
-    } catch (error) {
-      console.error('Error initializing game:', error);
-    }
-  };
-
+  // Handle element click for local gameplay
   const handleElementClick = (x: number, y: number) => {
-    if (loading || completed) return;
-    
-    // If no element is selected, select this one
+    if (completed) return;
     if (!selectedElement) {
-      const elementType = grid[y][x];
-      
-      // Only allow selecting movable elements
-      if (elementType !== MatterType.VOID && elementType !== MatterType.EARTH) {
-        setSelectedElement({ x, y });
-      }
+      setSelectedElement({ x, y });
     } else {
-      // If element is already selected, try to move it
-      handleMove(selectedElement.x, selectedElement.y, x, y);
+      // Only allow adjacent moves
+      const dx = Math.abs(selectedElement.x - x);
+      const dy = Math.abs(selectedElement.y - y);
+      if ((dx === 1 && dy === 0) || (dx === 0 && dy === 1)) {
+        // Example: swap elements (customize as needed)
+        const newGrid = grid.map(row => [...row]);
+        const temp = newGrid[selectedElement.y][selectedElement.x];
+        newGrid[selectedElement.y][selectedElement.x] = newGrid[y][x];
+        newGrid[y][x] = temp;
+        setGrid(newGrid);
+        setMoveCount(moveCount + 1);
+        if (JSON.stringify(newGrid) === JSON.stringify(targetGrid)) {
+          setCompleted(true);
+          onSolve();
+        }
+      }
       setSelectedElement(null);
     }
   };
 
-  const handleMove = async (fromX: number, fromY: number, toX: number, toY: number) => {
-    // Determine direction
-    let direction: Direction = Direction.NONE;
-    
-    if (toX === fromX && toY === fromY - 1) direction = Direction.UP;
-    else if (toX === fromX + 1 && toY === fromY) direction = Direction.RIGHT;
-    else if (toX === fromX && toY === fromY + 1) direction = Direction.DOWN;
-    else if (toX === fromX - 1 && toY === fromY) direction = Direction.LEFT;
-    else return; // Invalid move
-    
-    try {
-      // Call contract to make move
-      if (!contract) {
-        console.error('Contract is not available');
-        return;
-      }
-      await contract.make_move(puzzleId, fromX, fromY, direction);
-      
-      // Refresh game state
-      const newGrid = await contract.get_game_state(account, puzzleId);
-      setGrid(newGrid);
-      setMoveCount(moves + 1);
-      setCompleted(isSolved);
-      
-      if (isSolved) {
-        alert('Puzzle completed! 🎉');
-        onSolve();
-      }
-    } catch (error) {
-      console.error('Error making move:', error);
-    }
-  };
-
-  if (loading) return <div className="loading">Loading puzzle...</div>;
-//   if (Error) return <div className="error">Error: {Error};
-//   }</div>;
   if (!grid) return <div className="error">No game state available</div>;
 
   return (
@@ -102,22 +54,20 @@ const GameBoard: React.FC<GameBoardProps> = ({ puzzleId, initialGrid, targetGrid
         <p>Moves: {moveCount}</p>
         {completed && <div className="completed-banner">Completed! 🎉</div>}
       </div>
-      
       <div className="formula-section">
         <h3>Transformation Formulas</h3>
         {formulas.map((formula, index) => (
           <FormulaDisplay key={index} formula={formula} />
         ))}
       </div>
-      
-      <div 
+      <div
         className="game-board"
-        style={{ 
+        style={{
           gridTemplateColumns: `repeat(${grid[0].length}, 60px)`,
           gridTemplateRows: `repeat(${grid.length}, 60px)`
         }}
       >
-        {grid.map((row, y) => 
+        {grid.map((row, y) =>
           row.map((elementType, x) => (
             <MatterElement
               key={`${x}-${y}`}
@@ -130,10 +80,14 @@ const GameBoard: React.FC<GameBoardProps> = ({ puzzleId, initialGrid, targetGrid
           ))
         )}
       </div>
-      
       <div className="game-controls">
-        <button 
-          onClick={initializeGame}
+        <button
+          onClick={() => {
+            setGrid(initialGrid);
+            setMoveCount(0);
+            setCompleted(false);
+            setSelectedElement(null);
+          }}
           className="reset-button"
         >
           Reset Puzzle
@@ -141,6 +95,6 @@ const GameBoard: React.FC<GameBoardProps> = ({ puzzleId, initialGrid, targetGrid
       </div>
     </div>
   );
-}
+};
 
 export default GameBoard;

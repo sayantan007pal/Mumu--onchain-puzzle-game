@@ -1,12 +1,12 @@
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+import 'whatwg-fetch';
 
 // Mock useStarknet hook to prevent Starknet wallet errors during testing
-vi.mock('../src/hooks/useStarknet', () => ({
+jest.mock('../src/hooks/useStarknet', () => ({
   useStarknet: () => ({
     account: null,
     contract: null,
-    connectWallet: vi.fn(),
-    disconnectWallet: vi.fn(),
+    connectWallet: jest.fn(),
+    disconnectWallet: jest.fn(),
   }),
 }));

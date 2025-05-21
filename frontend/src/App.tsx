@@ -3,119 +3,81 @@ import React, { useState, useEffect } from 'react';
 import GameBoard from './components/GameBoard';
 import PuzzleSelector from './components/PuzzleSelector';
 import PuzzleCreator from './components/PuzzleCreator';
-import { useStarknet } from './hooks/useStarknet';
-import { fetchPuzzle } from './utils/contractInteraction';
-import { MatterType } from './types/GameTypes';
 import './styles/App.css';
 
-enum AppView {
-  CONNECT_WALLET,
-  PUZZLE_SELECT,
-  PUZZLE_PLAY,
-  PUZZLE_CREATE
-}
+const MOCK_PUZZLE = {
+  initialGrid: [[0, 1], [1, 0]],
+  targetGrid: [[1, 1], [1, 1]],
+  formulas: ['A+B'],
+};
 
-interface GameBoardProps {
-  puzzleId: number;
-  initialGrid: MatterType[][];
-  targetGrid: MatterType[][];
-  formulas: string[];
-  onSolve: () => void;
-}
+type AppView = 'PUZZLE_SELECT' | 'PUZZLE_PLAY' | 'PUZZLE_CREATE';
+
 const App: React.FC = () => {
-  const [view, setView] = useState<AppView>(AppView.CONNECT_WALLET);
-  const [selectedPuzzleId, setSelectedPuzzleId] = useState<number | null>(null);
-  const [puzzleData, setPuzzleData] = useState<{
-    initialGrid: MatterType[][];
-    targetGrid: MatterType[][];
-    formulas: string[];
-  } | null>(null);
+  const [view, setView] = useState<AppView>('PUZZLE_SELECT');
+  const [selectedPuzzleId, setSelectedPuzzleId] = useState<number | null>(1); // Default to puzzle 1 for dev
+  const [puzzleData, setPuzzleData] = useState<any>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  
-  const { account, contract, connectWallet, disconnectWallet } = useStarknet();
+  const [error, setError] = useState<string | null>(null);
 
-  // Effect to check wallet connection and set initial view
+  // Always use backend or mock data, with robust error handling
   useEffect(() => {
-    if (account) {
-      setView(AppView.PUZZLE_SELECT);
-    } else {
-      setView(AppView.CONNECT_WALLET);
-    }
-  }, [account]);
-
-  // Load puzzle data when a puzzle is selected
-  useEffect(() => {
-    const loadPuzzle = async () => {
-      if (!contract || selectedPuzzleId === null) return;
-      
-      try {
-        const puzzle = await fetchPuzzle(contract, selectedPuzzleId);
-        
-        setPuzzleData({
-          initialGrid: puzzle.initial_grid as MatterType[][],
-          targetGrid: puzzle.target_grid as MatterType[][],
-          formulas: puzzle.formulas
+    if (selectedPuzzleId !== null) {
+      setError(null);
+      fetch(`http://localhost:5000/puzzle/${selectedPuzzleId}`)
+        .then(res => {
+          if (!res.ok) throw new Error('Backend error');
+          return res.json();
+        })
+        .then(data => {
+          setPuzzleData({
+            initialGrid: data.initial_grid,
+            targetGrid: data.target_grid,
+            formulas: data.formulas,
+          });
+          setView('PUZZLE_PLAY');
+        })
+        .catch((err) => {
+          console.error('Falling back to mock puzzle:', err);
+          setPuzzleData(MOCK_PUZZLE);
+          setView('PUZZLE_PLAY');
+          setError('Backend unavailable, using mock puzzle.');
         });
-        
-        setView(AppView.PUZZLE_PLAY);
-      } catch (error) {
-        console.error("Failed to load puzzle:", error);
-        alert("Failed to load the selected puzzle. Please try again.");
-        setSelectedPuzzleId(null);
-      }
-    };
-    
-    loadPuzzle();
-  }, [contract, selectedPuzzleId]);
+    }
+  }, [selectedPuzzleId]);
 
-  const handlePuzzleSelect = (puzzleId: number) => {
-    setSelectedPuzzleId(puzzleId);
-  };
-
+  const handlePuzzleSelect = (puzzleId: number) => setSelectedPuzzleId(puzzleId);
   const handlePuzzleSolved = () => {
     setShowSuccessModal(true);
-    
-    // Auto-close success modal after 3 seconds
     setTimeout(() => {
       setShowSuccessModal(false);
-      setView(AppView.PUZZLE_SELECT);
-      setSelectedPuzzleId(null);
+      setView('PUZZLE_SELECT');
+      setSelectedPuzzleId(1); // Always default to puzzle 1 for dev
       setPuzzleData(null);
     }, 3000);
   };
 
-  const renderCurrentView = () => {
-    switch (view) {
-      case AppView.CONNECT_WALLET:
-        return (
-          <div className="connect-wallet-view">
-            <div className="logo-container">
-              <h1>MuMu</h1>
-              <p>An on-chain puzzle game on Starknet</p>
-            </div>
-            <button 
-              className="connect-wallet-button"
-              onClick={connectWallet}
-            >
-              Connect Wallet
-            </button>
-          </div>
-        );
-        
-      case AppView.PUZZLE_SELECT:
-        return (
+  return (
+    <div className="app-container">
+      <header className="app-header">
+        <div className="logo" onClick={() => setView('PUZZLE_SELECT')}>MuMu Game</div>
+      </header>
+      <main className="app-content">
+        {error && (
+          <div style={{ color: 'red', marginBottom: 16 }}>{error}</div>
+        )}
+        {view === 'PUZZLE_SELECT' && (
           <>
             <PuzzleSelector onSelectPuzzle={handlePuzzleSelect} />
             <div className="action-buttons">
-              <button onClick={() => setView(AppView.PUZZLE_CREATE)}>
-                Create Your Own Puzzle
-              </button>
+              <button onClick={() => setView('PUZZLE_CREATE')}>Create Your Own Puzzle</button>
             </div>
           </>
-        );
-        
-      case AppView.PUZZLE_PLAY:
-        return puzzleData ? (
+        )}
+        {view === 'PUZZLE_PLAY' && !puzzleData && (
+          <div className="loading">Loading puzzle...</div>
+        )}
+        {view === 'PUZZLE_PLAY' && puzzleData && (
           <GameBoard
             puzzleId={selectedPuzzleId!}
             initialGrid={puzzleData.initialGrid}
@@ -123,57 +85,19 @@ const App: React.FC = () => {
             formulas={puzzleData.formulas}
             onSolve={handlePuzzleSolved}
           />
-        ) : (
-          <div className="loading">Loading puzzle data...</div>
-        );
-        
-      case AppView.PUZZLE_CREATE:
-        return (
+        )}
+        {view === 'PUZZLE_CREATE' && (
           <>
             <PuzzleCreator />
             <div className="action-buttons">
-              <button onClick={() => setView(AppView.PUZZLE_SELECT)}>
-                Back to Puzzles
-              </button>
+              <button onClick={() => setView('PUZZLE_SELECT')}>Back to Puzzles</button>
             </div>
           </>
-        );
-        
-      default:
-        return null;
-    }
-  };
-
-  return (
-    <div className="app-container">
-      <header className="app-header">
-        <div className="logo" onClick={() => setView(AppView.PUZZLE_SELECT)}>
-          MuMu Game
-        </div>
-        
-        {account && (
-          <div className="wallet-info">
-            <span className="account">
-              {account.slice(0, 6)}...{account.slice(-4)}
-            </span>
-            <button 
-              className="disconnect-button"
-              onClick={disconnectWallet}
-            >
-              Disconnect
-            </button>
-          </div>
         )}
-      </header>
-      
-      <main className="app-content">
-        {renderCurrentView()}
       </main>
-      
       <footer className="app-footer">
         <p>Built on Starknet • © 2025 MuMu Game</p>
       </footer>
-      
       {showSuccessModal && (
         <div className="success-modal">
           <div className="success-modal-content">
