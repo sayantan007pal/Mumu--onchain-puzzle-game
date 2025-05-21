@@ -164,17 +164,11 @@ yarn test
 
 ### Backend tests
 
-Before running backend tests in parallel, install the pytest-xdist plugin:
-
-```bash
-pip install pytest-xdist
-```
-
-Run backend tests with parallel workers:
+Run backend tests (ensure you have Flask, Flask-Cors & pytest installed in your Python environment):
 
 ```bash
 cd backend
-pytest -n auto
+pytest
 ```
 
 ### Run all tests in parallel

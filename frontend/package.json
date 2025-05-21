@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "jest"
+    "test": "jest --runInBand --detectOpenHandles --forceExit --no-cache --cacheDirectory=tmp/jest_cache --watchAll=false"
   },
   "dependencies": {
     "get-starknet": "^3.3.3",

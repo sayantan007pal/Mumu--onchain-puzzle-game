@@ -1,6 +1,9 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS
-from game_logic import update_grid_with_move, apply_formula, check_completion
+try:
+    from flask_cors import CORS
+except ImportError:
+    def CORS(app): pass
+from backend.game_logic import update_grid_with_move, apply_formula, check_completion
 
 app = Flask(__name__)
 CORS(app)

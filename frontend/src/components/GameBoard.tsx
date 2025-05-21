@@ -62,6 +62,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ puzzleId, initialGrid, targetGrid
       </div>
       <div
         className="game-board"
+        aria-label="Game Board"
         style={{
           gridTemplateColumns: `repeat(${grid[0].length}, 60px)`,
           gridTemplateRows: `repeat(${grid.length}, 60px)`

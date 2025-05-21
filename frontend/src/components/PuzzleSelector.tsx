@@ -46,11 +46,14 @@ const PuzzleSelector: React.FC<PuzzleSelectorProps> = ({ onSelectPuzzle }) => {
         return res.json();
       })
       .then(data => {
-        setPuzzles(data.puzzles || MOCK_PUZZLES);
+        const puzzlesData = data.puzzles || MOCK_PUZZLES;
+        setPuzzles(puzzlesData);
+        localStorage.setItem('puzzles', JSON.stringify(puzzlesData));
         setLoading(false);
       })
       .catch(() => {
         setPuzzles(MOCK_PUZZLES);
+        localStorage.setItem('puzzles', JSON.stringify(MOCK_PUZZLES));
         setError('Backend unavailable, using mock puzzles.');
         setLoading(false);
       });
@@ -67,7 +70,7 @@ const PuzzleSelector: React.FC<PuzzleSelectorProps> = ({ onSelectPuzzle }) => {
   };
 
   if (loading) {
-    return <div className="loading">Loading puzzles...</div>;
+    return <div className="loading" data-testid="spinner">Loading puzzles...</div>;
   }
 
   if (error) {

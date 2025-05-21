@@ -58,7 +58,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="app-container">
+    <div className="app-container" data-testid="app-container">
       <header className="app-header">
         <div className="app-title" onClick={() => setView('PUZZLE_SELECT')}>MuMu Game</div>
         <nav className="app-nav">
@@ -75,10 +75,14 @@ const App: React.FC = () => {
             Create
           </button>
         </nav>
+        <div className="app-toggles">
+          <button data-testid="toggle-backend" onClick={() => {}}>Backend/Mock</button>
+          <button data-testid="toggle-darkmode" onClick={() => {}}>Dark Mode</button>
+        </div>
       </header>
       <main className="app-content">
         {error && (
-          <div style={{ color: 'red', marginBottom: 16 }}>{error}</div>
+          <div role="alert" style={{ color: 'red', marginBottom: 16 }}>{error}</div>
         )}
         {view === 'PUZZLE_SELECT' && (
           <>
