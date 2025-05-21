@@ -162,6 +162,29 @@ cd frontend
 yarn test
 ```
 
+### Backend tests
+
+Before running backend tests in parallel, install the pytest-xdist plugin:
+
+```bash
+pip install pytest-xdist
+```
+
+Run backend tests with parallel workers:
+
+```bash
+cd backend
+pytest -n auto
+```
+
+### Run all tests in parallel
+
+You can now run frontend, contracts, and backend tests together:
+
+```bash
+yarn test:all
+```
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

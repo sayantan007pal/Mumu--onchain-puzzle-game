@@ -60,7 +60,21 @@ const App: React.FC = () => {
   return (
     <div className="app-container">
       <header className="app-header">
-        <div className="logo" onClick={() => setView('PUZZLE_SELECT')}>MuMu Game</div>
+        <div className="app-title" onClick={() => setView('PUZZLE_SELECT')}>MuMu Game</div>
+        <nav className="app-nav">
+          <button
+            className={view === 'PUZZLE_SELECT' ? 'active' : ''}
+            onClick={() => setView('PUZZLE_SELECT')}
+          >
+            Play
+          </button>
+          <button
+            className={view === 'PUZZLE_CREATE' ? 'active' : ''}
+            onClick={() => setView('PUZZLE_CREATE')}
+          >
+            Create
+          </button>
+        </nav>
       </header>
       <main className="app-content">
         {error && (

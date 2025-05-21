@@ -1,4 +1,15 @@
 {
   "private": true,
-  "workspaces": ["frontend", "contracts"]
+  "workspaces": ["frontend", "contracts"],
+
+  "devDependencies": {
+    "babel-jest": "^29.7.0",
+    "concurrently": "^8.0.0"
+  },
+  "scripts": {
+    "test:backend": "pytest -n auto backend",
+    "test:contracts": "yarn workspace contracts test",
+    "test:frontend": "yarn workspace frontend test",
+    "test:all": "concurrently \"npm run test:backend\" \"npm run test:contracts\" \"npm run test:frontend\""
+  }
 }
