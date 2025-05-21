@@ -1,8 +1,8 @@
 // src/hooks/useGameState.ts
 import { useState, useCallback } from 'react';
 import { MatterType, GridPosition, Formula, GameState } from '../types/GameTypes';
-import { evaluateFormula } from '../utils/formulaUtils.ts';
-import { getAdjacentCells } from '../utils/gridUtils.ts';
+import { evaluateFormula } from '../utils/formulaUtils';
+import { getAdjacentCells } from '../utils/gridUtils';
 
 export const useGameState = (initialGrid: MatterType[][], targetGrid?: MatterType[][]) => {
   const [gameState, setGameState] = useState<GameState>({

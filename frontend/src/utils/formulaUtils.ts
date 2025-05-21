@@ -1,16 +1,5 @@
 // src/utils/formulaUtils.ts
-import { MatterType, FormulaCondition, Formula } from '../types/GameTypes.ts';
-
-// Import functions from the correct file
-import { 
-  parseFormulaString, 
-  parseCondition, 
-  parseElementType, 
-  elementTypeFromString,
-  formatFormula, 
-  formatCondition, 
-  formatElementType 
-} from './actualModulePath'; // Replace with the correct path to the module
+import { MatterType, FormulaCondition, Formula } from '../types/GameTypes';
 
 /**
  * Evaluate a formula condition against a matter type and its adjacent cells

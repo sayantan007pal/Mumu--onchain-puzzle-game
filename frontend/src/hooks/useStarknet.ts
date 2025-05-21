@@ -1,11 +1,10 @@
 // src/hooks/useStarknet.ts
 import { useEffect, useState } from 'react';
-import { connect, disconnect } from 'get-starknet';
+import getStarknet, { connect, disconnect } from 'get-starknet';
 
 import { Contract } from 'starknet';
 import { GAME_CONTRACT_ADDRESS } from '../utils/constants';
 import gameAbi from '../abis/game.json';
-//import getStarknet from 'get-starknet';
 
 export const useStarknet = () => {
   const [account, setAccount] = useState<string | null>(null);
