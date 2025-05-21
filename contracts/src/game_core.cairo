@@ -1,5 +1,5 @@
-// SPDX-License-Identifier: MIT
 %lang starknet
+// SPDX-License-Identifier: MIT
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.alloc import alloc

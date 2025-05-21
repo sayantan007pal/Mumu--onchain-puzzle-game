@@ -1,5 +1,5 @@
-// SPDX-License-Identifier: MIT
 %lang starknet
+// SPDX-License-Identifier: MIT
 
 // Matter type definitions
 namespace MatterType {

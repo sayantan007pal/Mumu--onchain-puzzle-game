@@ -5,11 +5,13 @@ require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
 describe('contracts prerequisites', () => {
   it('starknet-compile CLI is installed', () => {
-    expect(() => execSync('starknet-compile --version')).not.toThrow();
+    const cliCompile = path.resolve(__dirname, '../../venv310/bin/starknet-compile');
+    expect(() => execSync(`${cliCompile} --version`)).not.toThrow();
   });
 
   it('starknet CLI is installed', () => {
-    expect(() => execSync('starknet --version')).not.toThrow();
+    const cli = path.resolve(__dirname, '../../venv310/bin/starknet');
+    expect(() => execSync(`${cli} --version`)).not.toThrow();
   });
 
   it('.env file exists and variables are configured', () => {

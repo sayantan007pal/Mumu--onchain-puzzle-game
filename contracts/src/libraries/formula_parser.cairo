@@ -1,5 +1,5 @@
-// SPDX-License-Identifier: MIT
 %lang starknet
+// SPDX-License-Identifier: MIT
 
 from starkware.cairo.common.alloc import alloc
 from contracts.src.libraries.matter_types import MatterType

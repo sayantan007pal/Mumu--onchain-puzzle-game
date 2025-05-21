@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "compile": "starknet-compile src/*.cairo --output build/",
+    "compile": "mkdir -p build && starknet-compile src/*.cairo --output build/game.json",
     "deploy": "bash scripts/deploy.sh",
     "deploy:testnet": "bash scripts/deploy_testnet.sh",
     "add-levels": "bash scripts/add-levels.sh",

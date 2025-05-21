@@ -42,7 +42,7 @@ Visit [https://your-app.vercel.app](https://your-app.vercel.app) to play the dep
 - A Starknet-compatible wallet (Argent X, Braavos)
 - Some ETH on Starknet for transaction fees
 - Node.js and npm (or Yarn) for local development
-- Python 3.8+ and Cairo Lang for contract compilation and Starknet CLI (install via `pip install cairo-lang`). See [Cairo Lang Quickstart](https://www.cairo-lang.org/docs/quickstart.html) for more details.
+- Python 3.8+ and Cairo Lang for contract compilation and Starknet CLI (install via `pip install cairo-lang==0.8.0`). See [Cairo Lang Quickstart](https://www.cairo-lang.org/docs/quickstart.html) for more details.
 
 ### Local Development
 
