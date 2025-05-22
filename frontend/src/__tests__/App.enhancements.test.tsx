@@ -29,8 +29,9 @@ describe('App UI/UX enhancements', () => {
     expect(screen.getByTestId('app-container')).toBeVisible();
   });
 
-  it('has accessible ARIA labels and keyboard navigation', () => {
+  it('has accessible ARIA labels and keyboard navigation', async () => {
     render(<App />);
+    await waitFor(() => screen.getByLabelText(/game board/i));
     expect(screen.getByLabelText(/game board/i)).toBeInTheDocument();
   });
 

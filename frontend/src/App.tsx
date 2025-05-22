@@ -84,32 +84,30 @@ const App: React.FC = () => {
         {error && (
           <div role="alert" style={{ color: 'red', marginBottom: 16 }}>{error}</div>
         )}
-        {view === 'PUZZLE_SELECT' && (
-          <>
-            <PuzzleSelector onSelectPuzzle={handlePuzzleSelect} />
-            <div className="action-buttons">
-              <button onClick={() => setView('PUZZLE_CREATE')}>Create Your Own Puzzle</button>
-            </div>
-          </>
-        )}
-        {view === 'PUZZLE_PLAY' && !puzzleData && (
-          <div className="loading">Loading puzzle...</div>
-        )}
-        {view === 'PUZZLE_PLAY' && puzzleData && (
-          <GameBoard
-            puzzleId={selectedPuzzleId!}
-            initialGrid={puzzleData.initialGrid}
-            targetGrid={puzzleData.targetGrid}
-            formulas={puzzleData.formulas}
-            onSolve={handlePuzzleSolved}
-          />
-        )}
-        {view === 'PUZZLE_CREATE' && (
+        {view === 'PUZZLE_CREATE' ? (
           <>
             <PuzzleCreator />
             <div className="action-buttons">
               <button onClick={() => setView('PUZZLE_SELECT')}>Back to Puzzles</button>
             </div>
+          </>
+        ) : (
+          <>
+            <PuzzleSelector onSelectPuzzle={handlePuzzleSelect} />
+            <div className="action-buttons">
+              <button onClick={() => setView('PUZZLE_CREATE')}>Create Your Own Puzzle</button>
+            </div>
+            {!puzzleData ? (
+              <div className="loading">Loading puzzle...</div>
+            ) : (
+              <GameBoard
+                puzzleId={selectedPuzzleId!}
+                initialGrid={puzzleData.initialGrid}
+                targetGrid={puzzleData.targetGrid}
+                formulas={puzzleData.formulas}
+                onSolve={handlePuzzleSolved}
+              />
+            )}
           </>
         )}
       </main>

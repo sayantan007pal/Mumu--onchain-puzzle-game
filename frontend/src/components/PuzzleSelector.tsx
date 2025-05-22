@@ -70,19 +70,16 @@ const PuzzleSelector: React.FC<PuzzleSelectorProps> = ({ onSelectPuzzle }) => {
   };
 
   if (loading) {
-    return <div className="loading" data-testid="spinner">Loading puzzles...</div>;
-  }
-
-  if (error) {
-    return (
-      <div className="error-container">
-        <p className="error-message">{error}</p>
-      </div>
-    );
+    return <div className="loading" data-testid="spinner">Loading all puzzles...</div>;
   }
 
   return (
     <div className="puzzle-selector">
+      {error && (
+        <div className="error-container">
+          <p className="error-message">{error}</p>
+        </div>
+      )}
       <h2>Select a Puzzle</h2>
       <div className="puzzles-grid">
         {puzzles.map((puzzle) => (
